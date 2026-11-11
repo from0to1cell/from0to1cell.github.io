@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>from0to1cell</title>
+<meta name="description" content="from0to1cell is a small studio that builds simple, focused Android apps.">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --fg: #16181a;
+    --muted: #5d6368;
+    --card: #ffffff;
+    --line: #e4e4de;
+    --accent: #00a37a;
+    --accent-fg: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101213;
+      --fg: #eceeef;
+      --muted: #9aa1a6;
+      --card: #181b1c;
+      --line: #2a2e30;
+      --accent: #00dda4;
+      --accent-fg: #06201a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+  header { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-weight: 700; letter-spacing: -0.01em; }
+  .brand span { color: var(--accent); }
+  .lang button {
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 14px; cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { color: var(--fg); border-color: var(--fg); }
+  .hero { padding: 72px 0 56px; }
+  h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.1; letter-spacing: -0.03em; margin: 0 0 20px; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 34em; margin: 0; }
+  h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 20px; }
+  section { padding: 40px 0; border-top: 1px solid var(--line); }
+  .app { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .app h3 { margin: 0 0 6px; font-size: 1.25rem; }
+  .app p { margin: 0 0 16px; color: var(--muted); }
+  .btn {
+    display: inline-block; background: var(--accent); color: var(--accent-fg);
+    text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 999px;
+  }
+  footer { padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">from<span>0</span>to<span>1</span>cell</div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="it" aria-pressed="false">IT</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1 data-en="From <em>zero</em> to <em>one</em> small, useful app." data-it="Da <em>zero</em> a <em>una</em> piccola app utile."></h1>
+      <p class="lead"
+         data-en="from0to1cell is a small independent studio that designs and builds Android apps. We pick one everyday problem, solve it well, and ship."
+         data-it="from0to1cell è un piccolo studio indipendente che progetta e sviluppa app Android. Scegliamo un problema quotidiano, lo risolviamo bene e pubblichiamo."></p>
+    </div>
+
+    <section>
+      <h2 data-en="Apps" data-it="App"></h2>
+      <div class="app">
+        <h3 data-en="Text Highlighter" data-it="Evidenzia Testo"></h3>
+        <p data-en="Highlight text on a photo of a page, copy it, save or share the marked image."
+           data-it="Evidenzia il testo su una foto di una pagina, copialo, salva o condividi l'immagine evidenziata."></p>
+        <a class="btn" href="https://play.google.com/store/apps/details?id=it.from0to1cell.texthl" data-en="Get it on Google Play" data-it="Scaricala su Google Play"></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <!-- TODO: add the privacy policy link (currently on Google Sites) -->
+    <span>&copy; <span id="year"></span> from0to1cell</span>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('.lang button');
+    var nodes = document.querySelectorAll('[data-en]');
+    function setLang(lang) {
+      document.documentElement.lang = lang;
+      nodes.forEach(function (n) { n.innerHTML = n.getAttribute('data-' + lang); });
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === lang)); });
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    var initial = saved || ((navigator.language || 'en').toLowerCase().indexOf('it') === 0 ? 'it' : 'en');
+    buttons.forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.lang); }); });
+    document.getElementById('year').textContent = new Date().getFullYear();
+    setLang(initial);
+  })();
+</script>
+</body>
+</html>
